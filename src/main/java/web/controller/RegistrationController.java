@@ -4,13 +4,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import web.model.Role;
 import web.model.User;
 import web.service.UserService;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 class RegistrationController {
@@ -41,6 +43,7 @@ class RegistrationController {
         } catch (Exception e) {
             result.addError(new FieldError("user", "user", e.getMessage()));
             return new ModelAndView("templates/registration", "user", user);
+
         }
         return new ModelAndView("redirect:/login");
     }

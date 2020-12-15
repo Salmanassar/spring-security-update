@@ -12,11 +12,11 @@ import web.model.User;
 import web.service.UserService;
 
 import javax.validation.Valid;
-import java.util.List;
+import java.security.Principal;
 import java.util.Optional;
 
 @Controller
-//@EnableGlobalMethodSecurity(prePostEnabled = true)
+@RequestMapping("/admin")
 public class AdminController {
 
     private UserService userService;
@@ -30,25 +30,25 @@ public class AdminController {
         return userService;
     }
 
-    @GetMapping("/admin")
+    @GetMapping
     @ResponseBody
-    public ModelAndView getListUser(Model model) {
-        List<User> users = this.userService.listUsers();
-        return new ModelAndView("templates/tl/list", "users", users);
+    public ModelAndView getListUser(Principal principal, ModelAndView modelAndView) {
+        modelAndView = new ModelAndView("templates/tl/list");
+        modelAndView.addObject("users", this.userService.listUsers());
+        modelAndView.addObject("switch", getCurrentAdmin(principal));
+        return modelAndView;
     }
 
-    @RequestMapping(params = "form", method = RequestMethod.GET)
+    @RequestMapping(value = "/form", method = RequestMethod.GET)
     public String getPageForCreating(@ModelAttribute User user) {
         return "templates/tl/form";
     }
 
     @RequestMapping("{id}")
     public ModelAndView view(@PathVariable("id") User user) {
-
         return new ModelAndView("templates/tl/list");
     }
 
-    //    @PreAuthorize("hasAuthority('users:write')")
     @RequestMapping(method = RequestMethod.POST)
     public ModelAndView create(@Valid User user, BindingResult result, RedirectAttributes redirect) {
         if (result.hasErrors()) {
@@ -64,21 +64,28 @@ public class AdminController {
         return new ModelAndView("redirect:/admin");
     }
 
-    //    @PreAuthorize("hasAuthority('users:write')")
-    @RequestMapping(value = "delete/{id}")
+    @RequestMapping(path = "delete/{id}")
     public ModelAndView delete(@PathVariable("id") Long id) {
         this.userService.deleteUser(id);
         return new ModelAndView("templates/tl/list");
     }
 
-    //    @PreAuthorize("hasAuthority('users:write')")
-    @RequestMapping(path = {"/edit", "/edit/{id}"})
-    public String editUser(Model model, @PathVariable("id") Optional<Long> id, boolean isAdmin, boolean isUser) {
+    @RequestMapping(path = {"/edit/{id}"})
+    public ModelAndView modifyForm(Model model, @PathVariable("id") Optional<Long> id, User user) {
         if (id.isPresent()) {
-            User user = userService.readUser(id.get());
-            userService.updateUser(user);
+            user = userService.getUserById(id.get());
+            return new ModelAndView("templates/tl/formUpdate", "user", user);
         }
-        return "templates/tl/updateForm";
+        return new ModelAndView("redirect:/admin");
+    }
+
+    @RequestMapping(path = "/theAdmin",method = RequestMethod.GET)
+    public ModelAndView theAdminInformation(Principal principal) {
+        return new ModelAndView("templates/tl/currentAdmin","user", getCurrentAdmin(principal));
+    }
+
+    private User getCurrentAdmin(Principal principal){
+        return userService.findUserByEmail(principal.getName()).get();
     }
 }
 

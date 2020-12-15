@@ -17,7 +17,7 @@
         <setting name="provider-name" value="Hibernate" />
         <datasource-mapping>
           <factory-entry name="entityManager" value="330b9e2f-7235-402a-a5e5-c8e0d2ead4c4" />
-          <factory-entry name="entityManagerFactory" />
+          <factory-entry name="entityManagerFactory" value="330b9e2f-7235-402a-a5e5-c8e0d2ead4c4" />
           <factory-entry name="spring-security" value="330b9e2f-7235-402a-a5e5-c8e0d2ead4c4" />
         </datasource-mapping>
         <naming-strategy-map />

@@ -22,7 +22,7 @@
         </div>
         <div class="card-body">
             <div class="col-md-10">
-                <form id="userForm" th:action="@{/user}" th:object="${user}" action="#" method="post">
+                <form id="userForm" th:action="@{/user}" th:object="${u}" action="#" method="post">
                     <div th:if="${#fields.hasErrors('*')}" class="alert alert-danger">
                         <p th:each="error : ${#fields.errors('*')}" th:text="${error}">Validation error</p>
                     </div>

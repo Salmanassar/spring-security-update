@@ -21,13 +21,15 @@
             <input type="submit" class="btn btn-primary" value="Logout"/>
         </form>
     </div>
-
+    <div th:if="${switch.isUser()}">
+        <li><a th:href="@{admin/theAdmin}">Switch to USER Role</a></li>
+    </div>
     <div class="form-group col-md-7">
 
     </div>
     <div class="container my-5">
         <p class="my-5">
-            <a href="form.html" th:href="@{/(form)}" class="btn btn-primary">
+            <a href="form.html" th:href="@{/admin/form}" class="btn btn-primary">
                 <i class="fas fa-user-plus ml-2"> Create User </i></a>
         </p>
         <table class="table table-bordered table-striped">
@@ -38,9 +40,10 @@
                 <th>Last Name</th>
                 <td>Email</td>
                 <td>Data</td>
+                <td>Role</td>
                 <td>Update</td>
                 <td>Delete</td>
-                <td>Role</td>
+
             </tr>
             </thead>
             <tbody>
@@ -53,20 +56,19 @@
                 <td th:text="${user.getLastName()}"></td>
                 <td><a href="../registration.html" th:href="@{'/' + ${user.id}}" th:text="${user.email}"></a></td>
                 <td th:text="${#calendars.format(user.created)}"></td>
+                <td th:text="${user.getRolesString()}"></td>
                 <td>
-                    <a th:href="@{/edit/{id}(id=${user.id})}"
+                    <a href="formUpdate.html" th:href="@{'admin/edit/' + ${user.id}}"
                        class="btn btn-primary">
                         <i class="fas fa-user-edit ml-2"></i>
                     </a>
                 </td>
                 <td>
-                    <a th:href="@{/delete/{id}(id=${user.id})}"
+                    <a th:href="@{'admin/delete/' + ${user.id}}"
                        class="btn btn-primary">
                         <i class="fas fa-user-times ml-2"></i>
                     </a>
                 </td>
-                <td th:text="${user.getRoles().stream().collect(Collectors.joining(","))}"></td>
-
             </tr>
             </tbody>
         </table>

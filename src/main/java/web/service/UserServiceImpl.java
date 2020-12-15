@@ -6,7 +6,6 @@ import web.dao.DaoUser;
 import web.model.Role;
 import web.model.User;
 
-import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,36 +19,30 @@ public class UserServiceImpl implements UserService {
         this.daoUser = daoUser;
     }
 
-
     @Override
     public User createUser(User user) {
         return daoUser.createUser(user);
     }
-
 
     @Override
     public User readUser(Long id) {
         return (User) daoUser.readUser(id);
     }
 
-
     @Override
-    public void updateUser(User user) {
-        daoUser.updateUser(user);
+    public User updateUser(User user) {
+        return daoUser.updateUser(user);
     }
-
 
     @Override
     public void deleteUser(Long id) {
         daoUser.deleteUser(id);
     }
 
-
     @Override
     public List<User> listUsers() {
         return daoUser.listUsers();
     }
-
 
     @Override
     public Optional <User> findUserByEmail(String email) {

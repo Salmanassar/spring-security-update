@@ -22,7 +22,7 @@
     </div>
     <div class="card-body">
         <div class="col-md-10">
-            <form id="userForm" th:action="@{/admin/}" th:object="${user}" action="#" method="post">
+            <form id="userForm" href="list.html" th:action="@{/admin}" th:object="${user}" action="#" method="post">
                 <div th:if="${#fields.hasErrors('*')}" class="alert alert-danger">
                 <p th:each="error : ${#fields.errors('*')}" th:text="${error}">Validation error</p>
                 </div>
@@ -66,17 +66,7 @@
                         <p><input id = "password-always-checkbox" type="text" th:field="*{passwordConfirmation}"/>
                             <span th:if="${#fields.hasErrors('passwordConfirmation')}" th:errors="*{passwordConfirmation}"
                                   class="form-control"> Password Confirmation </span></p>
-
-
                     </div>
-                    <div class="arrow-button" th:align="right">
-                        <p><b>Choose role(s)</b></p>
-                        ADMIN: <input type="checkbox" name="isAdmin"
-                                      th:checked="${user.isAdmin}"><br>
-                        USER: <input type="checkbox" name="isUser"
-                                     th:checked="${user.isUser}"><br>
-                    </div>
-
 
                     <div class="col-md-12">
                         <input type="submit" class="btn btn-primary" value=" Submit "/>

@@ -1,10 +1,9 @@
 package web.dao;
 
-import org.springframework.stereotype.Service;
+
 import web.model.Role;
 import web.model.User;
 
-import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 

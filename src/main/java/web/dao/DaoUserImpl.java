@@ -10,7 +10,6 @@ import web.model.User;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import javax.transaction.Transactional;
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -30,7 +29,7 @@ public class DaoUserImpl implements DaoUser {
 
     @Override
     public User readUser(Long id) {
-        return (User) entityManager.createQuery("select u from User u where u.id=:id")
+        return (User) entityManager.createQuery("select u from User u join fetch u.roles where u.id=:id")
                 .setParameter("id", id)
                 .getSingleResult();
     }
@@ -44,14 +43,14 @@ public class DaoUserImpl implements DaoUser {
     @Override
     public List<User> listUsers() {
         TypedQuery<User> query =
-                entityManager.createQuery("select u from User u", User.class);
+                entityManager.createQuery("select u from User u join fetch u.roles", User.class);
         return query.getResultList();
     }
 
     @Override
     public Optional<User> findUserByEmail(String email) {
         Stream<User> streamUser = entityManager.createQuery(
-                "select u from User u where u.email = :email", User.class).
+                "select u from User u join fetch u.roles where u.email = :email", User.class).
                 setParameter("email", email).getResultStream();
         User user = streamUser.findFirst().orElse(null);
         return user!= null ? Optional.of(user) : Optional.empty();
@@ -70,7 +69,7 @@ public class DaoUserImpl implements DaoUser {
             throw new RuntimeException("There is the user with the same email");
         }
         else if (user.getRoles()== null) {
-          setRoleIfNull(user, EnumRoles.ROLE_ADMIN.name());
+          setRoleIfNull(user, EnumRoles.ROLE_USER.name());
         }
         passwordEncoder.encode(user.getPassword());
         return entityManager.merge(user);
@@ -81,10 +80,15 @@ public class DaoUserImpl implements DaoUser {
         User updateUser = getUserById(user.getId()).get();
         updateUser.setFirstName(user.getFirstName());
         updateUser.setLastName(user.getFirstName());
+        updateUser.setCreated(user.getCreated());
         updateUser.setEmail(user.getEmail());
         updateUser.setPassword(passwordEncoder.encode(user.getPassword()));
-        updateUser.setRoles(user.getRoles());
-        entityManager.flush();
+        if(user.getRoles()==null){
+            setRoleIfNull(updateUser,EnumRoles.ROLE_USER.name());
+        }
+        updateUser.setRolesList(user.getRoles());
+        user = updateUser;
+        entityManager.persist(user);
         return user;
     }
 
@@ -103,6 +107,6 @@ public class DaoUserImpl implements DaoUser {
     private void setRoleIfNull(User user, String role){
         List<Role> roles = new ArrayList<>();
         roles.add(new Role(user.getId(),role));
-        user.setRoles(roles);
+        user.setRolesList(roles);
     }
 }

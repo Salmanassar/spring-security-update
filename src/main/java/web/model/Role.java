@@ -6,6 +6,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 
 @Data
@@ -13,7 +14,7 @@ import java.util.List;
 @Component
 @NoArgsConstructor
 @Table(name = "role")
-public class Role implements GrantedAuthority {
+public class Role implements GrantedAuthority, Serializable {
 
     @Id
     @Column(name = "id")
@@ -23,7 +24,7 @@ public class Role implements GrantedAuthority {
     @Column(name = "roles", nullable = false)
     private String role;
 
-    @ManyToMany(mappedBy = "roles")
+    @ManyToMany(mappedBy = "roles",fetch = FetchType.EAGER)
     private List<User> users;
 
     public Role(Long id, String role) {

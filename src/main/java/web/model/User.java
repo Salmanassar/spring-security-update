@@ -1,20 +1,24 @@
 package web.model;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.hibernate.Hibernate;
+import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "user")
 @NoArgsConstructor
-public class User {
+public class User implements Serializable, UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,12 +47,17 @@ public class User {
     @Column(name = "calendar")
     private Calendar created = Calendar.getInstance();
 
-
-    @ManyToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
-    @JoinTable(name = "user_roles", joinColumns = {@JoinColumn(name = "user_id")},
-            inverseJoinColumns = {@JoinColumn(name = "role_id")})
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Role> roles;
 
+    public void setRoles(String role) {
+      List <Role> roles = new ArrayList<>();
+      roles.add(new Role(1L, role));
+    }
+
+    public void setRolesList (List<Role> roles) {
+        this.roles = roles;
+    }
     public User(String firstName, String lastName, String email, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -56,7 +65,7 @@ public class User {
         this.password = password;
     }
     public String getRolesString() {
-        return getRoles().stream().map(Object::toString).collect(Collectors.joining(", "));
+        return getRoles().stream().map(Role::getRole).collect(Collectors.joining(", "));
     }
     public boolean isAdmin() {
         return getRolesString().contains("ROLE_ADMIN");
@@ -64,5 +73,43 @@ public class User {
 
     public boolean isUser() {
         return getRolesString().contains("ROLE_USER");
+    }
+
+    public void setRole(Role role){
+        getRoles().add(role);
+    }
+
+    public void setRoleString (String role){
+        getRoles().add(new Role(1L, role));
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return false;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return false;
     }
 }
