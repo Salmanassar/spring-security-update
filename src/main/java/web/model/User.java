@@ -47,11 +47,6 @@ public class User implements Serializable, UserDetails {
     @Column(name = "calendar")
     private Calendar created = Calendar.getInstance();
 
-//        @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-//    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"),
-//            inverseJoinColumns = @JoinColumn(name = "role_id"))
-//    private List<Role> roles;
-
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Role> roles;
 
