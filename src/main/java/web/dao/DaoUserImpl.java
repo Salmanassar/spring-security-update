@@ -1,5 +1,6 @@
 package web.dao;
 
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
@@ -10,6 +11,7 @@ import web.model.User;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import javax.transaction.Transactional;
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -65,11 +67,12 @@ public class DaoUserImpl implements DaoUser {
     public User createUser(User user) {
         if (!isEmptyFields(user)) {
             throw new RuntimeException("There is an empty field(s)");
-        } else if (findUserByEmail(user.getEmail()).isPresent()) {
+        }
+        else if (findUserByEmail(user.getEmail()).isPresent()) {
             throw new RuntimeException("There is the user with the same email");
         }
         else if (user.getRoles()== null) {
-          setRoleIfNull(user, EnumRoles.ROLE_USER.name());
+          setRoleIfNull(user, EnumRoles.ROLE_ADMIN.name());
         }
         passwordEncoder.encode(user.getPassword());
         return entityManager.merge(user);
@@ -77,19 +80,10 @@ public class DaoUserImpl implements DaoUser {
 
     @Override
     public User updateUser(User user) {
-        User updateUser = getUserById(user.getId()).get();
-        updateUser.setFirstName(user.getFirstName());
-        updateUser.setLastName(user.getFirstName());
-        updateUser.setCreated(user.getCreated());
-        updateUser.setEmail(user.getEmail());
-        updateUser.setPassword(passwordEncoder.encode(user.getPassword()));
         if(user.getRoles()==null){
-            setRoleIfNull(updateUser,EnumRoles.ROLE_USER.name());
+            setRoleIfNull(user,EnumRoles.ROLE_USER.name());
         }
-        updateUser.setRolesList(user.getRoles());
-        user = updateUser;
-        entityManager.persist(user);
-        return user;
+        return entityManager.merge(user);
     }
 
     @Override

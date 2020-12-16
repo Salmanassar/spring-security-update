@@ -35,9 +35,9 @@
                 <th>Id</th>
                 <th>First Name</th>
                 <th>Last Name</th>
-                <td>Email</td>
-                <td>Data</td>
-                <td>Role</td>
+                <th>Email</th>
+                <th>Registration Data</th>
+                <th>Role</th>
             </tr>
             </thead>
             <tbody>
@@ -48,7 +48,7 @@
             <td th:text="${user.getFirstName()}"></td>
             <td th:text="${user.getLastName()}"></td>
             <td><a href="../registration.html" th:href="@{'/' + ${user.id}}" th:text="${user.email}"></a></td>
-            <td th:text="${#calendars.format(user.created)}"></td>
+            <td th:text="${#calendars.formatISO(user.created)}"></td>
             <td th:text="${user.getRolesString()}"></td>
             </tbody>
         </table>

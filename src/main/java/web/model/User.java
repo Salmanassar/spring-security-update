@@ -33,11 +33,11 @@ public class User implements Serializable, UserDetails {
     private String lastName;
 
     @NotEmpty(message = "Email is required.")
-    @Column(name = "email", unique=true)
+    @Column(name = "email", unique = true)
     private String email;
 
     @NotEmpty(message = "Password is required.")
-    @Column(name ="password")
+    @Column(name = "password")
     private String password;
 
     @Transient
@@ -47,41 +47,41 @@ public class User implements Serializable, UserDetails {
     @Column(name = "calendar")
     private Calendar created = Calendar.getInstance();
 
+//        @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+//    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"),
+//            inverseJoinColumns = @JoinColumn(name = "role_id"))
+//    private List<Role> roles;
+
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Role> roles;
 
-    public void setRoles(String role) {
-      List <Role> roles = new ArrayList<>();
-      roles.add(new Role(1L, role));
-    }
-
-    public void setRolesList (List<Role> roles) {
+    public void setRolesList(List<Role> roles) {
         this.roles = roles;
     }
+
+    public List<Role> getRoles() {
+        return roles;
+    }
+
     public User(String firstName, String lastName, String email, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
     }
+
     public String getRolesString() {
         return getRoles().stream().map(Role::getRole).collect(Collectors.joining(", "));
     }
+
     public boolean isAdmin() {
         return getRolesString().contains("ROLE_ADMIN");
     }
 
-    public boolean isUser() {
-        return getRolesString().contains("ROLE_USER");
+    public boolean isUser() { return getRolesString().contains("ROLE_USER");
     }
 
-    public void setRole(Role role){
-        getRoles().add(role);
-    }
-
-    public void setRoleString (String role){
-        getRoles().add(new Role(1L, role));
-    }
+    public void setRole(Role role) { getRoles().add(role); }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

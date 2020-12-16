@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import web.model.User;
 import web.service.UserService;
+import web.serviceController.CurrentUser;
 
 import java.security.Principal;
 
@@ -14,6 +14,8 @@ import java.security.Principal;
 public class UserController {
 
     private UserService userService;
+
+    private CurrentUser currentUser;
 
     public UserController(UserService userService) {
         this.userService = userService;
@@ -24,9 +26,12 @@ public class UserController {
         return userService;
     }
 
+    @Autowired
+    public void setCurrentUser(CurrentUser currentUser) { this.currentUser = currentUser;
+    }
+
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView theUserInformation(Principal principal) {
-            User user = userService.findUserByEmail(principal.getName()).get();
-        return new ModelAndView("templates/user/userList","user", user);
+        return new ModelAndView("templates/user/userList", "user", currentUser.getCurrentUser(principal));
     }
 }

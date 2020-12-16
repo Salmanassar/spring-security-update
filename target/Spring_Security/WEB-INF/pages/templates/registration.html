@@ -72,15 +72,12 @@
                                       class="form-control"> Password Confirmation </span></p>
                         </div>
 
-                        <div>
-                            <label>
-                                Role
-                            </label>
-                            <select multiple size="2" th:field="${user.roles}"
-                                    id="dropOperator">
-                                <option value="ROLE_ADMIN">Admin</option>
-                                <option value="ROLE_USER">User</option>
-                            </select>
+                        <div th:align="center">
+                            <p><b>Choose role(s)</b></p>
+                            ADMIN: <input type="checkbox" name="isAdmin"
+                                          th:checked="${isAdmin}"><br>
+                            USER: <input type="checkbox" name="isUser"
+                                         th:checked="${isUser}"><br>
                         </div>
                         <div class="col-md-12">
                             <input type="submit" class="btn btn-primary" value=" Registration "/>

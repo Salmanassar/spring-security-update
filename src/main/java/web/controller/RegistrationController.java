@@ -6,26 +6,30 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import web.model.Role;
 import web.model.User;
 import web.service.UserService;
+import web.serviceController.Checkbox;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 class RegistrationController {
+
+    private UserService userService;
+    private Checkbox checkbox;
 
     public RegistrationController(UserService userService) {
         this.userService = userService;
     }
 
-    private UserService userService;
-
     @Autowired
     public UserService getUserService() {
         return userService;
+    }
+
+    @Autowired
+    public void setCheckbox(Checkbox checkbox) {
+        this.checkbox = checkbox;
     }
 
     @RequestMapping(value = "signup")
@@ -34,16 +38,17 @@ class RegistrationController {
     }
 
     @PostMapping(value = "user/register")
-    public ModelAndView registerUser(@Valid final User user, final BindingResult result) {
+    public ModelAndView createUser(@Valid final User user, @RequestParam(name = "isAdmin", required = false) boolean isAdmin,
+                                   @RequestParam(name = "isUser", required = false) boolean isUser, final BindingResult result) {
         if (result.hasErrors()) {
             return new ModelAndView("templates/registration", "user", user);
         }
         try {
+            checkbox.selectRoleFromCheckbox(user, isAdmin, isUser);
             userService.createUser(user);
         } catch (Exception e) {
             result.addError(new FieldError("user", "user", e.getMessage()));
             return new ModelAndView("templates/registration", "user", user);
-
         }
         return new ModelAndView("redirect:/login");
     }
