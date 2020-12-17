@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import web.model.User;
 import web.service.UserService;
-import web.serviceController.Checkbox;
+import web.util.Checkbox;
 
 import javax.validation.Valid;
 

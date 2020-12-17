@@ -77,9 +77,9 @@ public class DaoUserImpl implements DaoUser {
 
     @Override
     public User updateUser(User user) {
-        if(user.getRoles()==null){
-            setRoleIfNull(user,EnumRoles.ROLE_USER.name());
-        }
+//        if(user.getRoles()==null){
+//            setRoleIfNull(user,EnumRoles.ROLE_USER.name());
+//        }
         return entityManager.merge(user);
     }
 

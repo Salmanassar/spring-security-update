@@ -29,8 +29,9 @@
                     </div>
                     <!--                    <input type="hidden" th:field="*{id}"/>-->
 
-                    <div class="pull-right">
-                        <a th:href="@{/admin}" href="list.html"> Users </a>
+                    <div class="col-md-12">
+                        <a th:href="@{/admin}" class="btn btn-primary"/>
+                        <i class="user-plus ml-0">back to main page</i></a>
                     </div>
                     <div class="row">
                         <input type="hidden" th:field="*{id}" th:class="${#fields.hasErrors('id')} ? 'field-error'"/>

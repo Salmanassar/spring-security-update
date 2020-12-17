@@ -1,4 +1,4 @@
-package web.serviceController;
+package web.util;
 
 import web.model.User;
 

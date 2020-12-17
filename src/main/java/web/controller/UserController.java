@@ -5,7 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import web.service.UserService;
-import web.serviceController.CurrentUser;
+import web.util.CurrentUser;
 
 import java.security.Principal;
 

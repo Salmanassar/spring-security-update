@@ -14,7 +14,6 @@
 </head>
 <body>
 <div layout:fragment="content" class="container">
-
     <div style="float:right">
         <form th:action="@{/logout}" method="POST">
             <i class="fas fa-user-times ml-2"></i>
@@ -54,7 +53,7 @@
                 <td th:text="${user.getId()}"></td>
                 <td th:text="${user.getFirstName()}"></td>
                 <td th:text="${user.getLastName()}"></td>
-                <td><a href="../registration.html" th:href="@{'/' + ${user.id}}" th:text="${user.email}"></a></td>
+                <td><a href="formUpdate.html" th:href="@{'admin/edit/' + ${user.id}}" th:text="${user.email}"></a></td>
                 <td th:text="${#calendars.format(user.created, 'dd-MM-yyyy HH:mm')}"></td>
                 <td th:text="${user.getRolesString()}"></td>
                 <td>

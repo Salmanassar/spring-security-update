@@ -1,4 +1,4 @@
-package web.serviceController;
+package web.util;
 
 import org.springframework.stereotype.Service;
 import web.model.Role;

@@ -10,8 +10,8 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import web.model.User;
 import web.service.UserService;
-import web.serviceController.Checkbox;
-import web.serviceController.CurrentUser;
+import web.util.Checkbox;
+import web.util.CurrentUser;
 
 import javax.validation.Valid;
 import java.security.Principal;
@@ -56,7 +56,7 @@ public class AdminController {
         return "templates/tl/form";
     }
 
-    @RequestMapping(value = "{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "admin/{id}", method = RequestMethod.GET)
     public ModelAndView view(@PathVariable("id") User user) {
         return new ModelAndView("templates/tl/list");
     }
