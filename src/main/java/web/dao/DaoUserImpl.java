@@ -1,6 +1,5 @@
 package web.dao;
 
-import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
@@ -11,7 +10,6 @@ import web.model.User;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import javax.transaction.Transactional;
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -32,8 +30,7 @@ public class DaoUserImpl implements DaoUser {
     @Override
     public User readUser(Long id) {
         return (User) entityManager.createQuery("select u from User u join fetch u.roles where u.id=:id")
-                .setParameter("id", id)
-                .getSingleResult();
+                .setParameter("id", id).getSingleResult();
     }
 
     @Override
@@ -44,8 +41,8 @@ public class DaoUserImpl implements DaoUser {
 
     @Override
     public List<User> listUsers() {
-        TypedQuery<User> query =
-                entityManager.createQuery("select u from User u join fetch u.roles", User.class);
+        TypedQuery<User> query = entityManager.createQuery(
+                "select u from User u join fetch u.roles", User.class);
         return query.getResultList();
     }
 

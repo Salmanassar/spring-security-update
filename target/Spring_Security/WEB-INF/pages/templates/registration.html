@@ -28,10 +28,7 @@
                     <div th:if="${#fields.hasErrors('*')}" class="alert alert-danger">
                         <p th:each="error : ${#fields.errors('*')}" th:text="${error}">Validation error</p>
                     </div>
-                    <!--                  <input type="hidden" th:field="*{getId()}"/>-->
-
                     <div class="row">
-
                         <div class="form-group col-md-7"
                              th:classappend="${#fields.hasErrors('firstName')} ? 'has-error'">
                             <label for="firstName" class="col-form-label">First Name</label>
@@ -72,7 +69,7 @@
                                       class="form-control"> Password Confirmation </span></p>
                         </div>
 
-                        <div th:align="center">
+                        <div class="u" th:align="c">
                             <p><b>Choose role(s)</b></p>
                             ADMIN: <input type="checkbox" name="isAdmin"
                                           th:checked="${isAdmin}"><br>
@@ -89,5 +86,4 @@
     </div>
 </div>
 </body>
-
 </html>

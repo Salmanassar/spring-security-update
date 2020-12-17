@@ -108,10 +108,5 @@ public class AdminController {
         User user = currentUser.getCurrentUser(principal);
         return new ModelAndView("templates/tl/currentAdmin", "user", user);
     }
-
-    @RequestMapping(path = "/update")
-    public String redirect() {
-        return "redirect:/admin";
-    }
 }
 
