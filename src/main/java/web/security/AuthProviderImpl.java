@@ -17,6 +17,7 @@ import web.service.UserService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Component
 public class AuthProviderImpl implements AuthenticationProvider {
@@ -41,7 +42,7 @@ public class AuthProviderImpl implements AuthenticationProvider {
             throw new BadCredentialsException("Password is not appropriate");
         }
 
-        List<Role> roles = user.getRoles();
+        Set<Role> roles = user.getRoles();
         List<GrantedAuthority> authorityList = new ArrayList<>();
         for (Role role : roles) {
             authorityList.add(new SimpleGrantedAuthority(role.getRole()));

@@ -4,16 +4,14 @@ import org.springframework.stereotype.Service;
 import web.model.Role;
 import web.model.User;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.StringJoiner;
+import java.util.*;
 
 @Service
 public class CheckboxImpl implements Checkbox {
 
     @Override
     public void selectRoleFromCheckbox(User user, boolean isAdmin, boolean isUser) {
-        List<Role> roles = new ArrayList<>();
+        Set<Role> roles = new HashSet<>();
         StringJoiner stringJoiner = new StringJoiner(" ");
         if (isAdmin) {
             stringJoiner.add("ROLE_ADMIN");

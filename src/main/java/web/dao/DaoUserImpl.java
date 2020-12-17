@@ -29,8 +29,7 @@ public class DaoUserImpl implements DaoUser {
 
     @Override
     public User readUser(Long id) {
-        return (User) entityManager.createQuery("select u from User u join fetch u.roles where u.id=:id")
-                .setParameter("id", id).getSingleResult();
+        return entityManager.find(User.class, id);
     }
 
     @Override
@@ -69,7 +68,7 @@ public class DaoUserImpl implements DaoUser {
             throw new RuntimeException("There is the user with the same email");
         }
         else if (user.getRoles()== null) {
-          setRoleIfNull(user, EnumRoles.ROLE_ADMIN.name());
+          setRoleIfNull(user, EnumRoles.ROLE_USER.name());
         }
         passwordEncoder.encode(user.getPassword());
         return entityManager.merge(user);
@@ -77,9 +76,6 @@ public class DaoUserImpl implements DaoUser {
 
     @Override
     public User updateUser(User user) {
-//        if(user.getRoles()==null){
-//            setRoleIfNull(user,EnumRoles.ROLE_USER.name());
-//        }
         return entityManager.merge(user);
     }
 
@@ -96,7 +92,7 @@ public class DaoUserImpl implements DaoUser {
     }
 
     private void setRoleIfNull(User user, String role){
-        List<Role> roles = new ArrayList<>();
+        Set<Role> roles = new HashSet<>();
         roles.add(new Role(user.getId(),role));
         user.setRolesList(roles);
     }
