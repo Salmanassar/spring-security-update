@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.List;
+import java.util.Set;
 
 @Data
 @Entity
@@ -25,7 +25,7 @@ public class Role implements GrantedAuthority, Serializable {
     private String role;
 
     @ManyToMany(mappedBy = "roles",fetch = FetchType.EAGER)
-    private List<User> users;
+    private Set<User> users;
 
     public Role(Long id, String role) {
         this.id=id;

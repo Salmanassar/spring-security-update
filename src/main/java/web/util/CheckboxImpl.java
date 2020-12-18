@@ -11,7 +11,7 @@ public class CheckboxImpl implements Checkbox {
 
     @Override
     public void selectRoleFromCheckbox(User user, boolean isAdmin, boolean isUser) {
-        Set<Role> roles = new HashSet<>();
+        List<Role> roles = new ArrayList<>();
         StringJoiner stringJoiner = new StringJoiner(" ");
         if (isAdmin) {
             stringJoiner.add("ROLE_ADMIN");
@@ -20,6 +20,6 @@ public class CheckboxImpl implements Checkbox {
             stringJoiner.add("ROLE_USER");
         }
         roles.add(new Role(user.getId(), stringJoiner.toString()));
-        user.setRolesList(roles);
+        user.setRoles(roles);
     }
 }

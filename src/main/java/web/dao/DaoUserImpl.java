@@ -10,6 +10,7 @@ import web.model.User;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import javax.transaction.Transactional;
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -28,13 +29,8 @@ public class DaoUserImpl implements DaoUser {
     }
 
     @Override
-    public User readUser(Long id) {
-        return entityManager.find(User.class, id);
-    }
-
-    @Override
     public void deleteUser(Long id) {
-        User user = readUser(id);
+        User user = getUserById(id).orElseGet(User::new);
         entityManager.remove(user);
     }
 
@@ -67,33 +63,27 @@ public class DaoUserImpl implements DaoUser {
         else if (findUserByEmail(user.getEmail()).isPresent()) {
             throw new RuntimeException("There is the user with the same email");
         }
-        else if (user.getRoles()== null) {
-          setRoleIfNull(user, EnumRoles.ROLE_USER.name());
-        }
         passwordEncoder.encode(user.getPassword());
         return entityManager.merge(user);
     }
 
     @Override
     public User updateUser(User user) {
+        if (!isEmptyFields(user)) {
+            throw new RuntimeException("There is an empty field(s)");
+        }
         return entityManager.merge(user);
     }
 
-    @Override
-    public List<Role> rolesList() {
-        TypedQuery<Role> query =
-                entityManager.createQuery("SELECT u FROM Role u", Role.class);
-        return query.getResultList();
-    }
-
     private boolean isEmptyFields(User user) {
-        return Stream.of(user.getFirstName(), user.getLastName(), user.getEmail(), user.getPassword())
+        return Stream.of(user.getFirstName(), user.getLastName(),
+                user.getEmail(), user.getPassword(), user.getRolesString())
                 .noneMatch(String::isEmpty);
     }
 
     private void setRoleIfNull(User user, String role){
-        Set<Role> roles = new HashSet<>();
+        List<Role> roles = new ArrayList<>();
         roles.add(new Role(user.getId(),role));
-        user.setRolesList(roles);
+        user.setRoles(roles);
     }
 }

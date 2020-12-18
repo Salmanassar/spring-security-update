@@ -25,11 +25,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User readUser(Long id) {
-        return (User) daoUser.readUser(id);
-    }
-
-    @Override
     public User updateUser(User user) {
         return daoUser.updateUser(user);
     }
@@ -54,8 +49,4 @@ public class UserServiceImpl implements UserService {
         return daoUser.getUserById(id).get();
     }
 
-    @Override
-    public List<Role> rolesList(){
-        return daoUser.rolesList();
-    }
 }

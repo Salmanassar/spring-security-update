@@ -97,9 +97,15 @@ public class AdminController {
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.POST)
     public ModelAndView modifyUser(Model model, @PathVariable("id") Optional<Long> id, @ModelAttribute User user,
                                    @RequestParam(name = "isAdmin", required = false) boolean isAdmin,
-                                   @RequestParam(name = "isUser", required = false) boolean isUser) {
-        checkbox.selectRoleFromCheckbox(user, isAdmin, isUser);
-        userService.updateUser(user);
+                                   @RequestParam(name = "isUser", required = false) boolean isUser,
+                                   final BindingResult result) {
+        try {
+            checkbox.selectRoleFromCheckbox(user, isAdmin, isUser);
+            userService.updateUser(user);
+        }catch (RuntimeException exception){
+            result.addError(new FieldError("user", "user", exception.getMessage()));
+            return new ModelAndView("templates/tl/formUpdate", "user", user);
+        }
         return new ModelAndView("redirect:/admin");
     }
 

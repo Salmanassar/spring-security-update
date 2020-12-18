@@ -12,8 +12,6 @@ public interface UserService {
 
     User createUser(User user);
 
-    User readUser(Long id);
-
     User updateUser(User user);
 
     void deleteUser(Long id);
@@ -23,6 +21,4 @@ public interface UserService {
     Optional <User> findUserByEmail(String email);
 
     User getUserById(Long id);
-
-    List<Role> rolesList();
 }

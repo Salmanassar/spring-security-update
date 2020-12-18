@@ -9,7 +9,7 @@ import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.Set;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
@@ -47,13 +47,13 @@ public class User implements Serializable, UserDetails {
     private Calendar created = Calendar.getInstance();
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Set<Role> roles;
+    private List<Role> roles;
 
-    public void setRolesList(Set<Role> roles) {
+    public void setRoles(List<Role> roles) {
         this.roles = roles;
     }
 
-    public Set<Role> getRoles() {
+    public List<Role> getRoles() {
         return roles;
     }
 
@@ -73,8 +73,6 @@ public class User implements Serializable, UserDetails {
     }
 
     public boolean isUser() { return getRolesString().contains("ROLE_USER"); }
-
-    public void setRole(Role role) { getRoles().add(role); }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

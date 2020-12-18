@@ -12,8 +12,6 @@ public interface DaoUser {
 
     User createUser(User user);
 
-    User readUser(Long id);
-
     User updateUser(User user);
 
     void deleteUser(Long id);
@@ -23,6 +21,4 @@ public interface DaoUser {
     Optional<User> findUserByEmail(String email);
 
     Optional<User> getUserById(Long id);
-
-    List<Role> rolesList();
 }
