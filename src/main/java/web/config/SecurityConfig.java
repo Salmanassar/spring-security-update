@@ -16,7 +16,7 @@ import web.security.AuthProviderImpl;
 
 @Configuration
 @EnableWebSecurity
-//@EnableGlobalMethodSecurity(prePostEnabled = true)
+//@EnableGlobalMethodSecurity(prePostEnabled = truef, p)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     public SecurityConfig() {

@@ -53,7 +53,7 @@ public class PersistenceJPAConfig {
             managerFactoryBean.setJpaVendorAdapter(adapter);
             Properties properties = new Properties();
             properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
-            properties.setProperty("hibernate.hbm2ddl.auto", "create");
+            properties.setProperty(environment.getProperty("hibernate.hbm2ddl.auto"), "update");
             managerFactoryBean.setJpaProperties(properties);
 
             return managerFactoryBean;
